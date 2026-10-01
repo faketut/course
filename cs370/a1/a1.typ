@@ -1,22 +1,29 @@
 = Problem 1.\
 1. convert $x=406.889$ (base-10) into FP given $F={beta=3,t=7,L=-7,U=7}$ using truncation. \
-1) Express in base $beta=3$: $120001.2200...$\
-2) Shift to get leading 0, set exponent p: $0.12000122 times 3^6, p=6$\
-3) Truncate to t digits: $0.1200012 times 3^6$.\
+1) Express in base $beta=3$: $406=120001_3$ and $0.889=0.220000002..._3$, so $x=120001.220000002..._3$\
+2) Shift to get leading 0, set exponent p: $0.120001220000002... times 3^6, p=6$\
+3) Truncate to t digits: $"fl"(x)=0.1200012 times 3^6$.\
 2. what is the value of machine epsilon E for this system?\
-$E=beta^(1-t)=3^(1-7)$.\
+$E=beta^(1-t)=3^(1-7)=3^(-6) approx 1.3717 times 10^(-3)$.\
 3. what is the positive number with smallest magnitude that can be represented in this system?\
-$0.0000001 times 3^(-7)$.\
+$0.1000000 times 3^(-7)$.\
 4. if we were to consider changing the allowable exponent range of F, what is the largest value of U for which overflow would occur when performing the conversion in (1).?\
 $U=5$\
 
 = Problem 2\
 1. given F(10,5,-10,10) with truncation. Compute the roots of $1.05x^2+12.93x+0.231=0$. The true roots are -0.017891 and -12.296. What is the relative error of each of the computed roots?\
-By formula given, $x_1=-0.018571, x_2=-12.295$. By $E_"rel"-(|x_("exact")-x_("approx")|)/(x_("exact"))$, we have $E_"rel"_1 =(|-0.017891+0.018571|)/(|-0.017891|)approx 3.8 times 10^(-2) "and" E_"rel"_2=(|-12.296+12.295|)/(|-12.296|)approx 8.1 times 10^(-5)$.\
+Carrying out the standard formula by hand in 5-digit truncated arithmetic ($a=1.05, b=12.93, c=0.231$):\
+$b^2 = 12.93 times 12.93 = 167.1849 -> 167.18$\
+$4a c = 4(1.05)(0.231) = 4(0.24255) = 0.97020$\
+$b^2-4a c = 167.18 - 0.97020 = 166.2098 -> 166.20$\
+$sqrt(166.20) = 12.89186... -> 12.891$\
+$x_2=(-b-sqrt(b^2-4a c))/(2a)=(-12.93-12.891)/(2.10)=-25.821/2.10=-12.29571... -> -12.295$\
+$x_1=(-b+sqrt(b^2-4a c))/(2a)=(-12.93+12.891)/(2.10)=-0.039/2.10=-0.01857142... -> -0.018571$ (the subtraction $-12.93+12.891$ loses leading digits: cancellation)\
+By $E_"rel"=(|x_("exact")-x_("approx")|)/(|x_("exact")|)$, we have $E_"rel"_1 =(|-0.017891+0.018571|)/(|-0.017891|)approx 3.8 times 10^(-2) "and" E_"rel"_2=(|-12.296+12.295|)/(|-12.296|)approx 8.1 times 10^(-5)$.\
 2. Show a math equivalent formula for $x_1$ is $x_1=(2c)/(-b-sqrt(b^2-4a c))$.\
 $x_1&=(2c (-b+sqrt(b^2-4a c)))/((-b-sqrt(b^2-4a c))(-b+sqrt(b^2-4a c)))\
-&=(2c (-b+sqrt(b^2-4a c))))/(b^2-(b^2-4a c))\
-&=(2c (-b+sqrt(b^2-4a c))))/(4a c)\
+&=(2c (-b+sqrt(b^2-4a c)))/(b^2-(b^2-4a c))\
+&=(2c (-b+sqrt(b^2-4a c)))/(4a c)\
 &=(-b+sqrt(b^2-4a c))/(2a)$\
 3. Deduce a algo (avoids cancellation erros) for calculating the roots of a quad. equation.\
 Algo R:\
@@ -80,14 +87,20 @@ $2s_2+2(1+2)s_3+1s_4&=3(-6+2)\
 2s_2+6s_3+s_4&=-12$\
 $1s_3+2(2+1)s_4+2s_5&=3(2+2)\
 s_3+6s_4+2s_5&=12$\
-For left boundary, by formula $s_1(t)=(1-3t^2+2t^3)y_1+(3t^2-2t^3)y_2+Delta x_1(t-2t^2+t^3)s_1+Delta x_1(-t^2+t^3)s_2$, $s^('')_1(x)=1/(Delta x_1^2)[(-6+12t)y_1+(6-12t)y_2]+1/(Delta x_1)[-4+6t)s_1+(-2+6t)s_2]$. Sub $t=0 "(i.e., "x=x_1")", Delta x_1=5, "and" y^'_1=-2/5: 10s_1+5s_2=-1.2$\
+For the left boundary, the free boundary condition is $S^('')_1(x_1)=0$. With $h=Delta x_1=5$ and $t=(x-x_1)/h$, the Hermite form of the spline on $[x_1,x_2]$ is
+$S_1(t)=(1-3t^2+2t^3)y_1+(3t^2-2t^3)y_2+h(t-2t^2+t^3)s_1+h(-t^2+t^3)s_2$\
+so $S^('')_1(t)=1/h^2 [(-6+12t)y_1+(6-12t)y_2]+1/h [(-4+6t)s_1+(-2+6t)s_2]$.\
+At $t=0$ (i.e. $x=x_1$) we have $y_1=2$, $y_2=0$, and $y^'_1=(y_2-y_1)/(Delta x_1)=(0-2)/5=-2/5$, hence
+$0=S^('')_1(x_1)=(-6y_1+6y_2)/h^2+(-4s_1-2s_2)/h=-12/25-(4s_1+2s_2)/5$\
+$arrow.r (4s_1+2s_2)/5=-12/25 arrow.r 4s_1+2s_2=-12/5 arrow.r 2s_1+s_2=-1.2$,\
+which is exactly the notes' free-boundary equation (2.5.8), $s_1+s_2/2=3/2 y^'_1$. Multiplying by 5, the first row of the system is $10s_1+5s_2=-6$.\
 For right boundary, given the right end has a prescribed slope of -1, we have $s_5=-1$.\
 Thus, using the $T limits(s)^(arrow.r) = limits(r)^(arrow.r)$ format gives:
 $mat(10,5,0,0,0;
 1,12,5,0,0;
 0,2,6,1,0;
 0,0,1,6,2;
-0,0,0,0,1) vec(s_1,s_2,s_3,s_4,s_5)=vec(-1.2,-46.2,-12,12,-1)$\
+0,0,0,0,1) vec(s_1,s_2,s_3,s_4,s_5)=vec(-6,-46.2,-12,12,-1)$\
 2. 
 ```python
 import numpy as np
