@@ -1,0 +1,5 @@
+benchmark,avg_dR2_add_EY,assets_w_sig_EY_loading
+CAPM,0.01568822270419336,10/25
+FF3,0.005440417216503874,14/25
+FF5,0.00270226612523536,11/25
+spanning: EY on FF5,"alpha=0.1490/yr, t=5.11, R2=0.500",

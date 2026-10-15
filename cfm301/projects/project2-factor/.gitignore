@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+# raw WRDS pulls (regenerable via docs/wrds_queries.sql; trimmed panels are committed)
+data/wrds_crsp_msf.csv
+data/wrds_comp_fundaq.csv
+data/wrds_ccm_link.csv
+# SEC EDGAR download cache from the proxy validation run
+data/raw_edgar/

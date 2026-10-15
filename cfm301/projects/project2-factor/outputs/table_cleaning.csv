@@ -1,0 +1,6 @@
+step,obs_affected,detail
+"duplicate (date,ticker) rows dropped",0,1294973 panel rows
+missing monthly returns dropped,6407,1294973 panel rows
+returns winsorized at 1%/99%,25771,"cut-offs [-0.4419, 0.6232]"
+EY missing (insufficient filing history),169185,1294973 ey rows
+EY winsorized at 1%/99%,22516,"cut-offs [-4.6557, 0.3260]"
