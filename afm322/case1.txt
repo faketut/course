@@ -1,0 +1,67 @@
+Based on the provided case text and assignment instructions for Lufthansa: To Hedge or Not to Hedge, here is the comprehensive analysis and mathematical breakdown required for your group submission.
+
+1. Cost Calculations for the Four Alternatives (US$500 Million Purchase)
+
+To build your required table, use the following formulas for each alternative across the potential exchange rate range (\(S_{1}\)) in one year (from 2.4 to 4.0 DM/USD):
+• Alternative 1: Do Nothing
+	• \(\text{Cost (in DM)} = \text{US\$}500\text{ million} \times S_1\)
+• Alternative 2: Forward Contract @ 3.20 DM/USD
+	• \(\text{Cost (in DM)} = \text{US\$}500\text{ million} \times 3.20 = \mathbf{1,600\text{ million DM}}\) (Fixed)
+• Alternative 3: Put Option to Sell DM (Buy USD) @ 3.20 DM/USD
+	• Note on Case Details: The option allows Lufthansa to buy USD at 3.20 DM/USD. The premium is 6% of the DM value exercised. If exercised, DM cost = \(1,600\text{ million}\). Premium = \(1,600 \times 6\% = 96\text{ million DM}\).
+	• If \(S_1 > 3.20\) (Dollar strengthens): Exercise option \(\rightarrow \text{Cost} = 1,600 + 96 = \mathbf{1,696\text{ million DM}}\).
+	• If \(S_1 < 3.20\) (Dollar weakens): Let option expire, buy at spot \(\rightarrow \text{Cost} = (\text{US\$}500\text{ million} \times S_1) + 96\text{ million DM}\).
+• Alternative 4: Money Market Hedge (Borrow DM / Invest USD)
+	• Amount needed in USD today = \(\frac{\$500,000,000}{1 + 0.095625} = \$456,360,981.18\)
+	• Convert to DM at Spot (3.17) = \(\$456,360,981.18 \times 3.17 = 1,446,964,310.33\text{ DM}\)
+	• Repayment of DM loan in 1 year = \(1,446,964,310.33 \times (1 + 0.063125) = \mathbf{1,538.30\text{ million DM}}\) (Fixed)
+
+Summary Reference Table (Millions of DM)
+
+Future Spot (\(S_{1}\))	Alt 1: Do Nothing	Alt 2: Forward (3.20)	Alt 3: Put Option	Alt 4: Money Market Hedge
+2.40	1,200.00	1,600.00	1,296.00	1,538.30
+2.80	1,400.00	1,600.00	1,496.00	1,538.30
+3.20	1,600.00	1,600.00	1,696.00	1,538.30
+3.60	1,800.00	1,600.00	1,696.00	1,538.30
+4.00	2,000.00	1,600.00	1,696.00	1,538.30
+(Note: In your final submission, make sure to expand this table using 0.1 increments as requested).
+
+2. Advantages & Disadvantages of the Strategies
+
+Strategy	Advantages	Disadvantages
+1. Do Nothing	• 100% upside flexibility if DM strengthens.
+• No upfront costs/premiums.	• Unlimited downside risk if USD continues to rise.
+• High budgeting uncertainty for the board.
+2. Forward Contract	• Complete certainty; eliminates FX risk.
+• No upfront cash premium required.	• Zero upside flexibility if DM appreciates.
+• Obligated to buy at 3.20 even if spot drops to 2.40.
+3. Put Option	• Caps maximum risk at 1,696M DM.
+• Allows savings if the USD depreciates.	• Very expensive upfront premium (96M DM).
+• Break-even point requires a significant USD drop.
+4. Money Market	• Cheapest guaranteed lock-in rate (1,538.3M DM).
+• Eliminates FX volatility entirely.	• Consumes Lufthansa's credit/debt capacity.
+• No upside flexibility if the USD crashes.
+
+3. Ruhnau's Fiduciary Roles & Responsibilities
+
+1. Capital Preservation: Protect Lufthansa's operational profitability and cash reserves from catastrophic currency depreciation.
+2. Debt Covenant Compliance: Ensure that selecting a financing mechanism (especially Alternative 4) does not breach existing corporate financial covenants regarding new leverage.
+3. Shareholder Maximization: Balance the cost of risk mitigation (e.g., the high option premium) against the probability of loss to optimize shareholder value.
+4. Corporate Transparency: Present clear, legally sound risk assessments to the board of directors for approval before executing a half-billion-dollar transaction.
+
+4. The Arbitrage Opportunity
+
+The Interest Rate Parity (IRP) theoretical forward rate is calculated as:
+\(\text{Forward}_{\text{IRP}}=3.17\times \frac{1+0.063125}{1+0.095625}=\mathbf{3.0759}\text{\ DM/USD}\)
+• The Discrepancy: The bank's market forward rate is 3.20 DM/USD, which overvalues the USD forward relative to interest rate differentials.
+• Arbitrage Execution:
+	1. Borrow DM at the lower German rate of 6.3125%.
+	2. Convert DM to USD at the spot rate of 3.17.
+	3. Invest USD at the higher US rate of 9.5625%.
+	4. Sell USD forward at the bank's locked rate of 3.20 to lock in a riskless profit.
+• Implication for Lufthansa: This mispricing is precisely why the Money Market Hedge (Alternative 4) is significantly cheaper than the Forward Contract (Alternative 2), saving Lufthansa roughly 61.7 million DM (\(1,600\text{M} - 1,538.3\text{M}\)).
+
+5. Recommendation Guidance
+
+A strong recommendation for this case traditionally favors a selective or split hedge strategy (e.g., hedging 50% with a forward/money market contract and leaving 50% unhedged, or utilizing the Money Market Hedge fully due to its arbitrage-driven cost benefit). It protects against the worst-case scenario while acknowledging the strong G-7 consensus that the USD was unsustainably overvalued in early 1985.
+Would you like me to fill out the entire increment table from 2.4 to 4.0 DM/USD for your final report, or help you write the detailed justification for your final recommendation?
