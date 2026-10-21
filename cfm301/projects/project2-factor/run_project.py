@@ -277,11 +277,17 @@ def main():
     ax.set_ylabel("growth of $1"); ax.figure.tight_layout()
     ax.figure.savefig("outputs/fig_cumret.png", dpi=150)
 
-    spread = qstats["mean_ann"]
-    ax = spread.plot(kind="bar", figsize=(7, 4),
-                     title="Annualized mean return by EY quintile (Q1=low EY)")
-    ax.set_ylabel("mean return (ann.)"); ax.figure.tight_layout()
-    ax.figure.savefig("outputs/fig_quintile_spread.png", dpi=150)
+    spread = qx.mean() * 12 * 100
+    market_ann = ff_c.loc[qx.index, "Mkt_RF"].mean() * 12 * 100
+    fig, ax = plt.subplots(figsize=(7, 4))
+    ax.bar(spread.index, spread, color="steelblue", label="EY quintiles")
+    ax.axhline(market_ann, color="#d4a017", linewidth=2,
+               label="Mkt_RF")
+    ax.set_title("Annualized mean excess return by EY quintile (Q1=low EY)")
+    ax.set_ylabel("mean excess return (%/yr)")
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig("outputs/fig_quintile_spread.png", dpi=150)
 
     prem = factor_premium_stats(factor)
     print(f"EY factor: n={prem['nobs']}, mean={prem['mean_ann']:.4f}/yr, "

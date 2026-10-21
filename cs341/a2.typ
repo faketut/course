@@ -45,3 +45,21 @@ The lecture justifys the kosaraju algo's correctness of finding all SCCs. SCCs w
 Time Complexity:\
 The Kosaraju algorithm runs in O(n + m) time, where n is the number of vertices and m is the number of edges. The BFS on the reversed graph also runs in O(n + m) time. Therefore, the overall time complexity of the algorithm is O(n + m).\
 (c) A student claims that a vertex is persistent if and only if its out-degree is positive. Give a counterexample and explain the error.
+Counterexample: Consider the directed graph G with vertices V = {A, B, C} and edges E = {(A, B), (B, C)}. In this graph, vertex A has an out-degree of 1 but A is not persistent because there is no directed cycle reachable from A. The error in the student's claim is that having a positive out-degree does not guarantee the existence of a directed cycle reachable from that vertex. A vertex can have outgoing edges but still lead to a dead end without any cycles, making it non-persistent.\
+
+= Problem 2 - Greedy 
+There are n jobs, each requiring exactly one unit of processing time on a single machine. Job i has an integer deadline $d_i$, where $1<=d_i<=n$, and profit $p_i>0$.
+A job earns its profit only if it finishes by its deadline. You may select a subset of the jobs and schedule them in the unit-length slots.
+Consider the following algorithm:\
+- Process jobs in nonincreasing order of profit.
+- For each job, place it in the latest currently empty slot that finishes by its deadline.
+- If no such slot exists, discard the job.\
+(a) Prove that this algorithm maximizes the total profit.\
+
+(b) Give an $O(n^2)$-time implementation.\
+
+
+
+
+
+
