@@ -1,0 +1,33 @@
+step,obs_affected,detail
+duplicate months dropped,0,1870 predictor rows
+missing monthly returns dropped,0,1188 return rows
+missing div_yield,40,1870 rows
+missing earn_yield,40,1870 rows
+missing pe10,157,1870 rows
+missing term_spread,1328,1870 rows
+missing credit_spread,577,1870 rows
+missing inflation,926,1870 rows
+missing ip_growth,589,1870 rows
+missing unemp,926,1870 rows
+missing oil_growth,1392,1870 rows
+missing vix,1428,1870 rows
+missing gdp_growth,926,1870 rows
+missing rf_level,757,1870 rows
+missing past_1y_ret,693,1870 rows
+missing past_vol,684,1870 rows
+missing cay,1058,1870 rows
+div_yield winsorized at 1%/99%,38,"cut-offs [1.237, 8.633]"
+earn_yield winsorized at 1%/99%,38,"cut-offs [2.526, 15.77]"
+pe10 winsorized at 1%/99%,36,"cut-offs [5.49, 41.23]"
+term_spread winsorized at 1%/99%,12,"cut-offs [-1.454, 3.733]"
+credit_spread winsorized at 1%/99%,25,"cut-offs [0.39, 3.655]"
+inflation winsorized at 1%/99%,20,"cut-offs [-1.325, 12.71]"
+ip_growth winsorized at 1%/99%,26,"cut-offs [-28.52, 31.28]"
+unemp winsorized at 1%/99%,18,"cut-offs [2.9, 10.2]"
+oil_growth winsorized at 1%/99%,10,"cut-offs [-53.74, 116.5]"
+vix winsorized at 1%/99%,10,"cut-offs [10.49, 44.61]"
+gdp_growth winsorized at 1%/99%,18,"cut-offs [-3.133, 10.31]"
+rf_level winsorized at 1%/99%,16,"cut-offs [0.02, 13.53]"
+past_1y_ret winsorized at 1%/99%,24,"cut-offs [-0.4182, 0.6141]"
+past_vol winsorized at 1%/99%,24,"cut-offs [0.003845, 0.1573]"
+cay winsorized at 1%/99%,18,"cut-offs [-0.08563, 0.07984]"

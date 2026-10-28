@@ -1,0 +1,6 @@
+.venv/
+data/fred_*.csv
+data/shiller_ie_data.xls
+data/french_factors_monthly.csv
+data/wrds_crsp_msi.csv
+__pycache__/

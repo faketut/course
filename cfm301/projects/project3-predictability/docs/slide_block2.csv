@@ -1,0 +1,37 @@
+predictor,horizon,corr,tstat
+Term spread (10y-3m),1Q,0.11,1.60
+Term spread (10y-3m),1Y,0.23,1.84
+Term spread (10y-3m),2Y,0.27,1.66
+Term spread (10y-3m),5Y,0.35,1.61
+Credit spread (BAA-AAA),1Q,0.02,0.15
+Credit spread (BAA-AAA),1Y,0.08,0.34
+Credit spread (BAA-AAA),2Y,0.12,0.44
+Credit spread (BAA-AAA),5Y,0.20,0.67
+Unemployment rate,1Q,0.12,1.86
+Unemployment rate,1Y,0.22,1.85
+Unemployment rate,2Y,0.19,1.08
+Unemployment rate,5Y,0.22,0.75
+GDP growth (past year),1Q,0.01,0.17
+GDP growth (past year),1Y,-0.13,-1.37
+GDP growth (past year),2Y,-0.11,-1.25
+GDP growth (past year),5Y,-0.08,-0.84
+Industrial production (past year),1Q,-0.01,-0.06
+Industrial production (past year),1Y,-0.04,-0.25
+Industrial production (past year),2Y,0.02,0.08
+Industrial production (past year),5Y,-0.04,-0.20
+Past 1-year return,1Q,-0.01,-0.12
+Past 1-year return,1Y,-0.05,-0.26
+Past 1-year return,2Y,-0.13,-0.55
+Past 1-year return,5Y,-0.26,-1.39
+Inflation (past year),1Q,-0.07,-1.07
+Inflation (past year),1Y,-0.12,-0.94
+Inflation (past year),2Y,-0.10,-0.58
+Inflation (past year),5Y,-0.03,-0.09
+Oil price (past-year change),1Q,-0.10,-1.20
+Oil price (past-year change),1Y,-0.18,-1.20
+Oil price (past-year change),2Y,-0.16,-1.08
+Oil price (past-year change),5Y,-0.11,-0.78
+Risk-free rate,1Q,-0.07,-1.23
+Risk-free rate,1Y,-0.12,-1.17
+Risk-free rate,2Y,-0.15,-1.05
+Risk-free rate,5Y,-0.22,-0.97

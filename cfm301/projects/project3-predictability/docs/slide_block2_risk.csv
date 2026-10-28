@@ -1,0 +1,13 @@
+predictor,horizon,corr,tstat
+VIX,1Q,0.12,0.96
+VIX,1Y,0.10,0.63
+VIX,2Y,0.13,0.75
+VIX,5Y,-0.16,-0.47
+Past volatility (last quarter),1Q,0.05,0.55
+Past volatility (last quarter),1Y,0.09,0.65
+Past volatility (last quarter),2Y,0.13,0.78
+Past volatility (last quarter),5Y,0.06,0.17
+Consumption-wealth ratio,1Q,0.16,2.92
+Consumption-wealth ratio,1Y,0.30,2.62
+Consumption-wealth ratio,2Y,0.42,2.23
+Consumption-wealth ratio,5Y,0.53,1.34
