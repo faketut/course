@@ -296,6 +296,39 @@ def main():
     print("\nSample splits (excess returns, key predictors):")
     print(splits.round(3).to_string())
 
+    # ---- quarterly-sampling comparison vs slides (all blocks) ----
+    # Quarterly sampling matches the slides' construction better on several
+    # cells (oil magnitude, term-spread 1Q sign, 5Y t-stats); kept as a
+    # sensitivity, not the main table, to avoid fitting to the answer.
+    qtab_rows = []
+    for c in PREDICTORS:
+        row = {"predictor": c}
+        for h in HORIZONS:
+            rho, t, n = corr_tstat_nw(pq[c], fq[f"R{h}"], h - 1)
+            row[f"corr_{HLAB[h]}"] = rho
+            row[f"t_{HLAB[h]}"] = t
+            row[f"n_{HLAB[h]}"] = n
+        qtab_rows.append(row)
+    qtab = pd.DataFrame(qtab_rows).set_index("predictor")
+    qtab.to_csv("outputs/table_predict_excess_quarterly.csv")
+    for tag, path, smap in slide_tables:
+        slide = pd.read_csv(path)
+        comp_rows = []
+        for _, r in slide.iterrows():
+            if r["predictor"] not in smap:
+                continue
+            c = smap[r["predictor"]]
+            comp_rows.append({
+                "predictor": r["predictor"], "horizon": r["horizon"],
+                "slide_corr": r["corr"], "slide_t": r["tstat"],
+                "my_corr_excess": qtab.loc[c, f"corr_{r['horizon']}"],
+                "my_t_excess": qtab.loc[c, f"t_{r['horizon']}"],
+                "my_n_excess": qtab.loc[c, f"n_{r['horizon']}"]})
+        comp = pd.DataFrame(comp_rows)
+        comp.to_csv(f"outputs/table_compare_{tag}_quarterly.csv", index=False)
+        agree = ((comp["slide_corr"] * comp["my_corr_excess"]) > 0).mean()
+        print(f"quarterly {tag} sign agreement: {agree:.0%}")
+
     # ---- figures ----
     fig, ax = plt.subplots(figsize=(8, 4.5))
     tab[[f"corr_{HLAB[h]}" for h in HORIZONS]].T.plot(ax=ax, marker="o")
