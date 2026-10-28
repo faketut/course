@@ -166,12 +166,18 @@ r.para("Headline: the slides replicate in the extended full sample "
        "which the relation is very strong, weak, and strong again.")
 
 r.h1("5. Sample splits and robustness")
+def ct(corr, t):
+    if pd.isna(corr):
+        return "n/a"
+    return f"{corr:+.2f} ({t:+.2f})"
+
+
 r.mono(["spec / predictor     1Q              1Y              2Y              5Y"] +
        [f"{row['spec'][:18]:18s} {row['predictor'][:10]:10s} "
-        f"{row['corr_1Q']:+.2f} ({row['t_1Q']:+.2f})  "
-        f"{row['corr_1Y']:+.2f} ({row['t_1Y']:+.2f})  "
-        f"{row['corr_2Y']:+.2f} ({row['t_2Y']:+.2f})  "
-        f"{row['corr_5Y']:+.2f} ({row['t_5Y']:+.2f})"
+        f"{ct(row['corr_1Q'], row['t_1Q']):>14s}  "
+        f"{ct(row['corr_1Y'], row['t_1Y']):>14s}  "
+        f"{ct(row['corr_2Y'], row['t_2Y']):>14s}  "
+        f"{ct(row['corr_5Y'], row['t_5Y']):>14s}"
         for _, row in splits.iterrows()])
 r.para("Valuation predictability is regime-dependent, not a stable "
        "parameter. Dividend yield's 5-year excess correlation is 0.74 "
