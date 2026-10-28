@@ -3,17 +3,36 @@
 Reproduce the predictability table on slides 24-25 of Ch. 8 (Equities) --
 correlations and t-statistics between each predictor and future equity
 returns at 1-quarter, 1-year, 2-year and 5-year horizons -- extended to the
-longest sample the data allow (CRSP VWRETD 1926-2024), and assess whether
-the extended-sample results are consistent with the slides.
+longest sample the data allow, and assess whether the extended-sample
+results are consistent with the slides.
 
-## Headline result
+## Report basis (rewritten 2026-10-28)
 
-The slides replicate in the full 1926-2024 sample (sign agreement 52/56 =
-93%; dividend yield 5-year 0.47 vs slide 0.49; cay 0.67 vs 0.53). The
-qualification is stability, not level: valuation predictability is
-regime-dependent (dividend yield 5-year: 0.74 pre-1963, 0.18 in 1963-2011,
-0.76 post-2011 on a short, episode-driven window). cay is the most robust
-predictor; volatility alone fails in both samples, as the slides conclude.
+The report (`report/report.pdf`, built by `report/make_report.py`) now
+follows `docs/predictors.ipynb`, which reproduces the Chapter 8 table
+from local submitted data only: market_data_full_history_2025.csv
+(dividend/earnings yields), Market_Dividends_Returns.csv (CRSP vwretd),
+FRED files, and cay_current.csv (fixed-coefficient Lettau-Ludvigson
+cay), sample 1926-01 through 2026-10, geometric excess returns,
+per-sample 1%/99% winsorization, HAC t-statistics at horizon - 1 lags.
+The notebook's `Predictor Data` files are not in this repo, so the
+report's tables are transcribed from the notebook's executed outputs
+into `outputs/notebook_*.csv`.
+
+## Headline result (notebook numbers)
+
+The slides replicate in the full 1926-2026-10 sample (sign agreement
+53/56; dividend yield 5-year 0.53 vs slide 0.49; cay 0.33 vs 0.53).
+Dividend yield is strong in every era including post-2011 (5-year 0.69),
+while earnings yield is strong pre-1990 (0.60) but dead from 1990 onward
+(0.03) and insignificant post-2011. Volatility alone fails as a return
+predictor while predicting realized volatility itself up to 2 years.
+The earlier Shiller/FRED pipeline (below) gave nearly the same numbers
+for most predictors -- notably the same earnings-yield gap vs the slides
+-- so that gap is not an artefact of one earnings series. The earlier
+pipeline's outputs (`outputs/table_predict*.csv`,
+`outputs/table_compare_*.csv`) are superseded for the report and kept
+only as a cross-check.
 
 ## Pipeline
 
@@ -52,6 +71,10 @@ predictor; volatility alone fails in both samples, as the slides conclude.
 
 ## Outputs
 
-`outputs/` holds the predictability tables (nominal + excess), slide
-comparisons, bucket table, GARCH table, sensitivity table, sample-split
-table and figures. `report/report.pdf`, `presentation/deck.pptx`.
+`outputs/notebook_*.csv` holds the report's tables (main table, cleaning
+audit, missing counts, VIX-to-realized-volatility diagnostic, buckets,
+subperiod and HAC-lag-0 sensitivities), transcribed from
+`docs/predictors.ipynb`. The earlier pipeline's `outputs/table_*.csv`
+(Shiller/FRED, 1926-2024) remain as a cross-check.
+`report/report.pdf`, `presentation/deck.pptx` (deck still reflects the
+earlier pipeline's numbers).

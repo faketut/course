@@ -1,0 +1,15 @@
+predictor,n_1Q,clipped_1Q,n_1Y,clipped_1Y,n_2Y,clipped_2Y,n_5Y,clipped_5Y
+Dividend yield,1090,22,1081,22,1069,22,1033,22
+Earnings yield,1090,22,1081,22,1069,22,1033,22
+Term spread (10y - 3m),858,18,849,18,837,18,801,16
+Credit spread (BAA - AAA),1090,22,1081,22,1069,22,1033,22
+Unemployment rate,921,18,912,18,900,18,864,16
+GDP growth (past year),921,18,912,18,900,18,864,16
+Industrial production (past year),1090,22,1081,22,1069,22,1033,22
+Past 1-year return,1090,22,1081,22,1069,22,1033,22
+Past volatility (last quarter),1090,22,1081,22,1069,22,1033,22
+Inflation (past year),921,20,912,20,900,18,864,18
+Oil price (past-year change),329,8,322,8,311,8,279,6
+Risk-free rate,1089,15,1080,15,1068,15,1032,15
+VIX,372,8,364,8,353,8,319,8
+Consumption-wealth ratio,871,18,862,18,850,18,814,18
