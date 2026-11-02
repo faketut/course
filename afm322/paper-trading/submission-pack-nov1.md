@@ -97,3 +97,23 @@
 - Team pack SENT by Jack (confirmed Nov 2).
 - FX OTC forward LOCKED at 1.3970 (Finnhub/OANDA ~07:27 EST, IBKR spot blank):
   sell USD 5,000,000 / buy CAD 6,985,000, settle Nov 30. Log status EXECUTED (Excel OTC).
+
+## Nov 2 ~16:05-16:13 EST — FINAL HRC check (paper only, no order changes)
+- Order 1117270116 no longer in Orders tab ("No Recent Orders").
+- Trades tab: 45 fills totalling 100 contracts @1405.00, 08:24-09:39 EST.
+- Positions: LONG 100 Dec HRC, last 1406.
+- CORRECTION to morning snapshot: 7/93 meant 7 filled + 93 remaining = 100 total.
+  The 93 subsequently filled; remainder is 0, not 93 outstanding. An agent
+  inference of "100 filled + 93 remaining = 193" is arithmetically impossible
+  for a 100-contract order and is rejected here.
+- Portal average-price / P&L displays (1405.34, +690.46) do not reconcile
+  with 1405.00 fills and are flagged unverified.
+- Steel hedge is therefore FULLY executed: 100 contracts = 2,000 tons @1405.
+
+## Nov 2 ~16:22 EST — CORRECTION to avg/P&L flag above
+- Verified by arithmetic: avg 1405.34 = (2,810,000 fills + 686 commission) / 2,000
+  = 1405.343 -> 1405.34. P&L +690.46 = market value 2,811,376.46 - 2,810,686
+  = exactly 690.46. So avg and P&L DO reconcile with fills @1405 once
+  commission is included; the earlier "do not reconcile" flag is withdrawn.
+- Remaining minor gap only: market-value implied price 1405.688 vs last
+  1406.00 (snapshot valuation basis, unverified) - does not contradict fills.
