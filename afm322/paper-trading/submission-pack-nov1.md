@@ -117,3 +117,11 @@
   commission is included; the earlier "do not reconcile" flag is withdrawn.
 - Remaining minor gap only: market-value implied price 1405.688 vs last
   1406.00 (snapshot valuation basis, unverified) - does not contradict fills.
+
+## Nov 2 17:46 EST — Decisions by Jack's delegation to Muse
+- Weather: Option B (69-unit OTC linear swap, fixed 690 HDD) — log EXECUTED.
+- Carbon: unresolved gap reported honestly, no invented vendor quote.
+- Scenario #4: bull call spread structure locked, with authorship disclosure
+  (Muse-selected on delegation, NOT Jack's personal pick; Jack-vs-WSB label void).
+  Specific strikes/premiums TBD from Nov 2 chain, not invented.
+  See decisions-nov2-evening.md.
