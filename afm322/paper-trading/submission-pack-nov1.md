@@ -92,3 +92,8 @@
 - Report must state partial fill + working remainder honestly, and recheck
   final fill count before submission. Do NOT write "100 contracts hedged"
   unless the remainder fills.
+
+## Nov 2 morning — decisions locked by Jack
+- Team pack SENT by Jack (confirmed Nov 2).
+- FX OTC forward LOCKED at 1.3970 (Finnhub/OANDA ~07:27 EST, IBKR spot blank):
+  sell USD 5,000,000 / buy CAD 6,985,000, settle Nov 30. Log status EXECUTED (Excel OTC).

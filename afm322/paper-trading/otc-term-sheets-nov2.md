@@ -59,3 +59,8 @@ EXECUTED until its input is filled from a named source.
 5. Jack locks Scenario #4, then WSB pick is revealed and logged.
 6. Flip log rows PLANNED -> EXECUTED, fill report placeholders,
    team sign-off, submit by ~18:00 EST.
+
+## FX — LOCKED Nov 2 (Jack's confirmation)
+- Rate: 1.3970 (Finnhub/OANDA ~07:27 EST Nov 2, 1.39701 rounded to 1.3970).
+- CAD amount: 6,985,000. Settle Nov 30, 2026. Status in log: EXECUTED (Excel-logged OTC).
+- Team pack: SENT by Jack (confirmed Nov 2 morning).
