@@ -1,0 +1,9 @@
+ticker,fund_name,role,fee_pct,turnover_pct,tna_usd_bn,as_of,inception
+FCNTX,Fidelity Contrafund,active,0.74,29.0,174.0,2026-08-31,1967-05-17
+FMAGX,Fidelity Magellan,active,0.64,54.0,34.4,2026-09-30,1963-05-02
+AGTHX,American Funds Growth Fund of America Class A,active,0.58,39.0,351.4,2026-09-30,1973-12-01
+PRGFX,T. Rowe Price Growth Stock,active,0.66,35.2,50.2,2026-09-30,1950-04-11
+TRBCX,T. Rowe Price Blue Chip Growth,active,0.70,18.3,58.2,2026-11-19,1993-06-30
+VFINX,Vanguard 500 Index Investor,benchmark,0.14,,,2026-11-13,1976-08-31
+NAESX,Vanguard Small-Cap Index Investor,benchmark,0.17,,,2026-11-13,1989-10-03
+VIVAX,Vanguard Value Index Investor,benchmark,0.17,,,2026-11-13,1992-11-02
