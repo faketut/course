@@ -89,6 +89,23 @@ the mean return over the replicating portfolio, with a tracking-error
 t-statistic. Persistence uses Carhart net alpha in 1994-2009 vs
 2010-2024 plus Spearman rank correlation.
 
+## Fee sensitivity (time-varying expense ratios)
+
+The main analysis adds back a constant fee (current prospectus value).
+Zacks publishes annual expense ratios back to 2016
+(`data/zacks_fees_annual.csv`, read from Zacks /performance pages
+2026-11-19; 2016-2026, 55 rows, no gaps). `src/fee_sensitivity.py`
+re-runs the gross Carhart alpha with time-varying fees (Zacks annual
+fee / 12 for 2016-2024, current fee before 2016; everything else
+identical). Result (`outputs/table_fee_sensitivity.csv`): full-sample
+gross alpha moves by at most **0.014pp** (FCNTX 3.115% -> 3.104%,
+FMAGX 0.136% -> 0.146%, AGTHX 2.393% -> 2.407%, PRGFX 1.674% ->
+1.672%, TRBCX 2.527% -> 2.526%); on the 2016-2024 window alone, where
+every month uses a Zacks fee, the largest move is **0.047pp**. No
+verdict changes. The constant-fee shortcut is harmless because the
+five funds' fees barely move (2016-2024 averages 0.63-0.70% vs current
+0.58-0.74%) and the sample-average fee is what matters for gross alpha.
+
 ## Bug note (do not repeat)
 
 The French factor file is in **decimals** (e.g. Mkt-RF = 0.0508 in
