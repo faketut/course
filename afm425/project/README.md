@@ -1,5 +1,16 @@
 # Topic 13 — The Hedge-Fund Treasury Basis Trade and Systemic Risk (2024–2026)
 
+**Status: ASSIGNED — Group 8, Topic #13, confirmed by Jack 2026-11-11
+from Professor Jordan Brenner's assignment email ("Good Evening
+Group #8 … Please confirm receipt of this email"). This is (A),
+not a request. Professor's reply is DONE — Jack confirmed receipt himself
+2026-11-11 from his Waterloo inbox.****
+
+**Hedge fix applied 2026-11-11 (Jack's "just start and implement it"):
+`basis_trade.py` now uses the DV01-matched 850 contracts (was
+1,176.5); the stress table is unchanged and now verified — see
+`analysis/basis_trade.py` checks.**
+
 ## What is in this folder
 
 - `analysis/basis_trade.py` — the mandatory original quantitative
@@ -11,9 +22,6 @@
   AI declaration and AI-critique skeleton, and references.
 - `research/research-plan.md` — primary sources, data to pull,
   and the verification checklist before this draft becomes submittable.
-- `presentation/outline.md` — 10-minute talk plan for this topic.
-- `confirmation-email.md` — draft email to the professor, NOT sent,
-  with [brackets] for the missing facts.
 
 ## Headline finding (from the model — see the draft for the workings)
 
