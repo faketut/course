@@ -18,7 +18,6 @@
 ]
 
 #v(0.6em)
-The topic was assigned by Professor Jordan Brenner (email, "Good Evening Group #8") and receipt was confirmed on 11 November 2026. All model numbers are computed by `analysis/basis_trade_real_ctd.py` and `analysis/basis_trade.py` (run them to reproduce every table). Appendix B is now finalised (confirmed by the team, 16 Nov 2026); all references are verified against primary sources (see research plan). The base-case sign is settled: the Nov 10 close of 94.188 gives Scenario A +\$67,850 (+3.57% of equity).
 
 = Event overview
 
