@@ -1,0 +1,67 @@
+metric,value
+ctd.security,3 7/8% Treasury Note due 8/15/2033
+ctd.cusip,91282CHT1
+ctd.coupon_pct,3.875
+ctd.yield_pct_cme,4.9023
+ctd.yield_pct_observed_close,4.894
+ctd.conversion_factor,0.887
+ctd.futures_price,106.25
+ctd.cash_close_per_100,94.188
+ctd.cash_bid_per_100,94.094
+ctd.cash_offer_per_100,94.125
+ctd.implied_repo_pct_cme,3.39
+ctd.sofr_pct_nov9,3.88
+ctd.asof,2026-11-10 close (Safe Rate / Treasury EOD) + 2026-11-10 CME settle
+ctd.delivery,2026-12-01 (first delivery day)
+ctd.T_years_to_delivery,0.0548
+derived_price.clean_per_100,94.1883
+derived_price.dirty_per_100,95.115
+derived_price.accrued_per_100,0.9266
+derived_price.gross_basis_pts,-0.0554
+derived_price.cme_basis_net_of_carry_pts,-0.3539
+derived_price.dv01_per_100k_contract_usd,55.03
+derived_price.cme_cash_dv01_usd,53.98
+derived_price.modified_duration_yrs,5.843
+derived_price.cme_modified_duration_yrs,5.7838
+derived_price.macaulay_duration_yrs,5.9859
+derived_price.cme_macaulay_duration_yrs,5.9266
+representative_trade_100m.face_usd,100000000.0
+representative_trade_100m.market_value_dirty_usd,95114955.0
+representative_trade_100m.equity_usd_2pct_haircut,1902299.0
+representative_trade_100m.repo_borrowing_usd,93212656.0
+representative_trade_100m.leverage,50.0
+representative_trade_100m.dv01_cash_leg_usd_per_bp,55034.0
+representative_trade_100m.dv01_per_future_usd_per_bp,62.04
+representative_trade_100m.n_futures_contracts_100k,887
+representative_trade_100m.dv01_futures_total_usd_per_bp,55034.0
+base_case_pnl_to_delivery_usd.coupon_accrual,212329.0
+base_case_pnl_to_delivery_usd.repo_cost,-198173.0
+base_case_pnl_to_delivery_usd.carry_net,14156.0
+base_case_pnl_to_delivery_usd.basis_pnl_scenario_A_our_repricing,55425.0
+base_case_pnl_to_delivery_usd.total_scenario_A,67850.0
+base_case_pnl_to_delivery_usd.total_scenario_A_pct_equity,3.57
+base_case_pnl_to_delivery_usd.basis_pnl_scenario_B_cme_net_basis,353900.0
+base_case_pnl_to_delivery_usd.scenario_B_status,"REJECTED - implies cash ~93.71, ~38-48c below every Nov 10 print"
+base_case_pnl_to_delivery_usd.total_scenario_B,368056.0
+base_case_pnl_to_delivery_usd.total_scenario_B_pct_equity,19.35
+base_case_pnl_to_delivery_usd.exact_leg_check_cash_pnl,250268.0
+base_case_pnl_to_delivery_usd.exact_leg_check_futures_pnl,15755.0
+base_case_pnl_to_delivery_usd.identity_gap_vs_carry_plus_basis,-1731.0
+stress_usd_and_pct_of_equity.repo_plus_50bp_cost,25538.0
+stress_usd_and_pct_of_equity.repo_plus_50bp_pct_equity,1.34
+stress_usd_and_pct_of_equity.haircut_2_to_4pct_extra_equity,1902299.0
+stress_usd_and_pct_of_equity.haircut_2_to_4pct_pct_equity,100.0
+stress_usd_and_pct_of_equity.basis_widens_cash_cheapens_0.50pts_loss,500000.0
+stress_usd_and_pct_of_equity.basis_widens_0.50pts_pct_equity,26.3
+stress_usd_and_pct_of_equity.yield_falls_50bp_variation_margin_call,2751689.0
+stress_usd_and_pct_of_equity.yield_falls_50bp_vm_pct_equity,144.7
+stress_usd_and_pct_of_equity.yield_falls_50bp_cash_gain_exact,2799005.0
+stress_usd_and_pct_of_equity.yield_rises_50bp_cash_loss_exact,-2705527.0
+stress_usd_and_pct_of_equity.yield_rises_50bp_futures_gain_dv01,2751689.0
+aggregate_scaling_fed_sep2025_real_duration.basis_trade_usd,830000000000.0
+aggregate_scaling_fed_sep2025_real_duration.gross_long_leg_dv01_usd_per_bp,484964906.0
+aggregate_scaling_fed_sep2025_real_duration.basis_widens_0.10pts_collective_loss_usd,830000000.0
+sensitivities.haircut_pct_leverage,"{'0': 'inf', '1': 100.0, '2': 50.0, '4': 25.0}"
+sensitivities.repo_shock_bp_cost_usd,"{'25': 12769.0, '50': 25538.0, '100': 51075.0}"
+sensitivities.basis_cash_cheapening_pts_loss_usd,"{'0.10': 100000.0, '0.50': 500000.0, '1.00': 1000000.0}"
+sensitivities.yield_move_bp_vm_call_usd,"{'25': 1375844.0, '50': 2751689.0, '100': 5503377.0}"

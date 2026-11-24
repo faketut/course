@@ -1,0 +1,342 @@
+# AFM 425 Group Report — DRAFT v0.5 (2026-11-15)
+
+**Topic 13: The Hedge-Fund Treasury Basis Trade and Systemic Risk (2024–2026)**
+**Group 8 — Team: Jian Feng, Wenzheng An, David Jiang, Johnson Xu, Zhaozhen Xi — Topic assigned by Professor Jordan Brenner
+(assignment email, "Good Evening Group #8"), confirmed by Jack 2026-11-11.**
+**The base-case sign is now settled (Nov 10 close 94.188; Scenario A +$67,850), and Appendix B is now finalised (confirmed by the team, 16 Nov 2026). All references are now
+verified against primary sources (see research plan). All model numbers
+are computed by `analysis/basis_trade_real_ctd.py` and
+`analysis/basis_trade.py` (run them to reproduce every table).
+Hedge fix applied 2026-11-11: DV01-matched 850 contracts (was 1,177)
+in the par illustration; the real-CTD run uses 887 contracts.
+**v0.5 changes: adopted the Nov 10 cash close (94.188, Safe Rate / Treasury EOD) and the official Nov 10 futures settle (106.25) — both legs Nov 10 vintage; Scenario A is now +$67,850 (+3.57%), gross basis −0.0554; Scenario B rejected on observed prices; stresses unchanged. v0.3 changes: real CTD identified from CME Treasury Analytics
+(3 7/8% 8/15/2033, CUSIP 91282CHT1, CF 0.8870); model re-run on it
+in `analysis/basis_trade_real_ctd.py`; and a BASIS SIGN CORRECTION
+found by exact repricing — the par illustration's base case was
++$120k with the sign flipped, it is -$80k (see Section 3).**
+
+---
+
+## 1. Event overview
+
+The Treasury cash-futures basis trade is not an event with a single
+date. It is a trade that grew, quietly, into a systemic position —
+and then, twice, showed what happens when it unwinds.
+
+The trade is simple: buy a cash Treasury note, sell the matching
+Treasury futures contract, finance the cash bond in the repo market,
+and pocket the small gap — the *basis* — between the cash price and
+the futures price (scaled by the conversion factor). The basis
+converges to zero at futures delivery, so the profit is, in the
+textbook telling, the difference between the repo rate you pay and
+the implied repo rate the package earns. The gap is tiny — a few
+basis points — so the trade only pays if it is levered enormously.
+That is the whole story, and the whole problem.
+
+By September 2025 the trade had, on the Federal Reserve's own
+decomposition of SEC Form PF data, reached approximately **$830
+billion** — about double its early-2020 peak, 35% of hedge funds'
+$2.4 trillion long Treasury exposure, and 3.5% of privately held
+Treasuries. Hedge funds' gross Treasury exposure had doubled since
+2023 to **$4.0 trillion** ($2.4tn long / $1.6tn short), financed by
+**$3.0 trillion** of repo borrowing, and the 50 largest funds held
+about 90% of it. A CFTC-based proxy put the trade above $1tn in notional value in May 2025 (Patel, Chicago Fed Letter 516) — a different method and date from Monin's Form PF decomposition, so the two figures are not directly comparable. Federal Reserve officials publicly flagged these positions in late 2025 as a systemic vulnerability, echoing March 2020. The trade's two stress tests frame the report: March 2020, when the "dash for cash" broke Treasury liquidity: hedge funds net-sold approximately $173bn of Treasuries, concentrated in funds identified as likely basis traders (Banegas, Monin & Petrasek 2021), and large basis traders alone sold an estimated $91–105bn while their short futures fell from $659bn to $554bn (Barth & Kahn, OFR Working Paper 21-01). The Fed announced it would buy at least $500bn of Treasuries (15 March 2020) and in fact bought about $1.6tn from March to May 2020 (Kashyap, Stein, Wallen & Younger 2025). The unwind amplified a shock driven by the flight to cash; it was not the shock's primary cause, and large dealers provided more repo funding during the crisis, not less (Kruttli et al. 2025); and April 2025, when tariff announcements
+hit Treasury yields and liquidity — though, importantly, the
+documented April 2025 unwind was in the *related* swap-spread
+trade (about $60bn unwound in April, a further $40bn in May),
+while the cash-futures basis trade kept growing to $830bn by
+September. Keeping those two trades distinct matters, and the
+report does so throughout.
+
+## 2. The fixed income securities involved
+
+**Cash Treasuries (the long leg).** A Treasury note is a plain
+fixed-coupon bond: semi-annual coupons, principal at maturity,
+backed by the US government. The trade usually uses the
+cheapest-to-deliver (CTD) bond into the futures contract — often
+an off-the-run note, because the futures price is set by the
+cheapest bond to deliver. What the trade buys is therefore not
+"the 10-year" in the abstract but a specific CUSIP with a
+specific coupon, maturity and price.
+
+**Treasury futures (the short leg).** A CME Treasury futures
+contract (e.g. the 10-year note future, TY, $100,000 face) does
+not reference one bond. The short may deliver any bond from a
+defined basket; to make different coupons and maturities
+comparable, the exchange applies a *conversion factor* (CF) to
+each, and the invoice amount on delivery is CF × futures price
+plus accrued interest. The futures price is set by the CTD —
+the bond minimising the basis, defined as
+**Basis = P(cash) − CF × F(futures)**.
+The short futures position is the hedge: if yields rise, the cash
+bond falls and the short futures gains, and vice versa. The hedge
+ratio is set by the conversion factor and the DV01 ratio, not by
+notional alone — a point the quantitative section makes concrete.
+
+**Repo (the funding leg).** A repurchase agreement is a sale of
+the bond today plus an agreement to repurchase it shortly after
+at a slightly higher price; the annualised difference is the repo
+rate. The lender advances less than the collateral's market value
+— the *haircut* — so the fund puts up only the haircut in equity
+and borrows the rest. With a 2% haircut, $100 of bonds needs $2 of equity: 50x leverage. Treasury repo haircuts are typically around 3% or less, implying leverage above 30x (Barth & Kahn, OFR Working Paper 21-01); futures initial margin of 1–3% implies 33–99x (Patel, Chicago Fed Letter 516); measured leverage of large basis traders in 2019 averaged 21x (median 17.6x). A zero haircut is possible only when a single intermediary handles both legs. The 50x in our model is the leverage at the assumed 2% haircut, not a claim about typical fund leverage. Only the cash leg
+needs repo financing; the futures leg needs only margin — but that
+margin is settled daily in cash, which turns out to be the trade's
+soft underbelly (Section 3).
+
+These are the securities the course did *not* centre on: the
+report's mechanism is not a bond's yield in isolation but the
+interaction of a cash bond, a futures contract on a basket of
+bonds, and an overnight funding market — three instruments whose
+risks do not add up the way a single-bond duration calculation
+suggests.
+
+## 3. Quantitative analysis (summary; full workings in Appendix A)
+
+**Question.** If the trade is duration-hedged, what can still kill
+it — and how large is each risk next to the equity that funds it?
+
+**Method.** A representative $100m-face trade on the *actual*
+cheapest-to-deliver into the December 2026 10-year futures contract
+(TYZ6), identified from CME Treasury Analytics on 11 Nov 2026
+(12:10 PM CT): the **3 7/8% Treasury note due 15 Aug 2033, CUSIP
+91282CHT1**, coupon 3.875%, conversion factor 0.8870, implied repo 3.39%. The cash leg is the observed Nov 10 close, 94.188 per 100 face (bid 94.094 / offer 94.125), from Safe Rate Markets' security page republishing Treasury's end-of-day prices; it reprices to a yield of 4.894%, 0.8 bp below CME's reported 4.9023%. The futures leg is the official Nov 10 settlement, 106.25 (106'080). Both legs are Nov 10 vintage. Our DV01 $55.03 vs CME's $53.98 (+1.9%) and our modified duration 5.84 vs CME's 5.78 (+1.0%) cross-check the model. (The Nov 11 cash close does not exist: the US bond market was closed on 11 Nov 2026 for Veterans Day, so the Nov 10 close is the last cash print.) Funding is
+SOFR 3.88% (effective 9 Nov, NY Fed); haircut 2%; delivery 1 Dec
+2026 (20 days, T = 0.055y). The hedge is DV01-matched: **887
+contracts**. Aggregate scaling uses the Fed's September 2025
+figures. The model is in `analysis/basis_trade_real_ctd.py`; every
+number below is its output, and the base case is computed leg by
+leg (cash P&L, futures P&L, repo cost) by exact repricing, not by
+a duration approximation.
+
+**Result: the trade.** Modified duration 5.84 years (not 8.18 —
+the real CTD has 6.7 years to maturity, not 10), DV01 $55,034 per bp on the $100m cash leg, equity $1.90m, repo borrowing $93.21m, leverage 50x. Over 20 days to delivery: coupon +$212,329, repo cost −$198,173, carry +$14,156. The basis at entry is **−0.0554 points (cash cheap)**, and it converges to zero at delivery, so the basis P&L is +$55,425 — **total +$67,850, +3.57% of equity**. That sign is the finding, not a typo: with Basis G = P − CF×F, the clean P&L of the hedged position is exactly dG, so a trade entered with cash *cheap* earns as the basis converges. The trade earns only when cash is *cheap* at entry (G < 0). The magnitude is thin and print-dependent: across the Nov 10 prints the total runs +$67,850 (close, primary) to ~+$164,000 (bid), with the offer at ~+$133,000 and the mid at ~+$148,000 — positive throughout (see Appendix A).
+This corrects the par illustration too: its base case was
++$120,000 with the basis sign flipped; corrected it is −$80,000
+(coupon $1.00m − repo $0.98m − basis $0.10m).
+
+**Scenario B is rejected.** CME also reports a basis *net of carry* of −0.3539 points, which implies a cash price near 93.71 and a base-case P&L of +$368,056 (+19.35% of equity). That cash price is ~38–48c below every Nov 10 print (bid 94.094 / offer 94.125 / close 94.188), so Scenario B is contradicted by the observed close and is not carried as a live scenario; it is kept in Appendix A only for comparison, labelled as rejected. The sign is settled: the base case is positive. What remains is magnitude, and it is print-dependent: across the Nov 10 prints the total runs +$67,850 (close, primary) to ~+$164,000 (bid), with the offer at ~+$133,000 and the mid at ~+$148,000 — positive throughout. The report leads with the close-based +$67,850 and footnotes the bracket. The close is Treasury's end-of-day print, not a mid (it sits 6.3c above the Nov 10 offer), so the report quotes the close as the close and footnotes the bracket rather than averaging. What does *not* depend on any of this is the stress table below: DV01 and equity move under 2% between the scenarios.
+
+**Result — the stresses.** Each stress is shown as a cash demand
+next to the $1.90m of equity that must meet it:
+
+| Stress (20-day horizon, real CTD) | Cash demand | % of equity |
+|---|---|---|
+| Repo rate +50 bp | $25,538 | 1.34% — small, because only 20 days are left to delivery |
+| Haircut 2% → 4% | $1,902,299 extra equity | 100% — double the capital or halve the trade |
+| Basis widens 0.50 points (cash cheapens, G falls) | $500,000 loss | 26.3% |
+| Yields **fall** 50 bp: futures variation margin called in cash, cash gain unrealised | $2,751,689 | **144.7%** |
+| Yields **rise** 50 bp: cash loss vs futures gain | ~$0 net (exact: −$2,705,527 vs +$2,751,689) | hedged, by design |
+
+**Interpretation.** The last two rows are the thesis, and the
+real CTD makes it sharper than the par illustration did: the
+duration is shorter (5.84 vs 8.18 years), so the margin call is
+smaller in dollars ($2.75m vs $4.09m) — but the equity is smaller
+too, and the call is still **145% of equity**. A fund with $1.9m
+of equity facing a $2.75m margin call must find cash, sell the
+bond into a falling market, or default on the margin call. That
+is a liquidity risk, not a market risk, and no duration number
+captures it. The same logic applies to the haircut: a lender
+raising the haircut from 2% to 4% in volatile markets doubles
+the equity the same position requires, and a fund that does not
+have it must sell — into the same market every other basis fund
+is selling into. Scaled up, the arithmetic is systemic: at the
+Fed's $830bn aggregate, a 0.10-point basis widening is an ~$830m
+collective loss, and the gross long-leg DV01 at the real CTD
+duration is ~$485m per bp — the market must absorb the selling
+of the largest, most levered holders in the world's deepest bond
+market. March 2020 is the precedent for what that absorption
+looks like when it fails; April 2025 is the warning that the
+neighbouring swap-spread trade unwinds first and fastest.
+Two further risks the CTD data makes concrete: the CTD is only
+111 bp of implied repo ahead of the next bond in the basket
+(4.5% 11/15/2033 at 2.28%), so the CTD can switch if yields
+move, breaking the hedge ratio; and the Dec 2026 contract
+expires in weeks, so the whole $830bn position must be rolled
+into March 2027 — a roll is itself a moment when funding and
+margin can bind.
+
+A second leverage channel sits in the futures leg itself: initial-margin leverage in Treasury futures was about 175x (5-year) and 120x (10-year) before the pandemic, and about 70x and 50x since 2021 as volatility raised margin requirements (BIS Quarterly Review, September 2023, Box A). A rise in initial margin mechanically forces deleveraging (post cash or close positions), and disorderly margin deleveraging exacerbated distress in both September 2019 and March 2020.
+
+**Limitations.** The base-case P&L is print-dependent (see the magnitude bracket above); the funding rate is SOFR, a proxy for a hedge fund's actual repo rate, which is higher; futures initial margin is treated as a liquidity demand, not modelled as a return drag; and the aggregate scaling assumes the representative duration applies to the whole $830bn book, which it does not exactly. None of these changes the ranking of the risks: funding and margin dominate market risk in every sensitivity we ran. The close is Treasury's end-of-day print, not a mid (it sits 6.3c above the Nov 10 offer), so the report quotes the close as the close and footnotes the bracket rather than averaging.
+
+## 4. Implications
+
+**For intermediaries.** Dealers and repo lenders are the trade's
+plumbing and its first line of defence. When volatility rises
+they raise haircuts and margin — rationally, fund by fund — and
+collectively create the fire sale they are protecting themselves
+against. Prime brokers face the counterparty channel: the failure
+of one large basis fund imposes losses on its lenders and forces
+sales of the collateral they seize.
+
+**For investors.** Asset managers are on the other side of the
+futures: their long futures demand is, in the Chicago Fed's
+telling, what the basis trade translates into cash-market
+liquidity. That is the trade's genuine social value — it makes
+Treasuries more liquid in normal times. The cost is that the
+liquidity is provided by the most fragile holders, and it can
+vanish in stress, exactly when it is needed. Hedge-fund investors
+face the same asymmetry as the funds: a strategy that earns a
+few basis points, levered 50x, and can lose multiples of its
+equity in a margin call.
+
+**For the public.** A Treasury-market seizure is not an abstract
+market event: Treasury yields set mortgage rates, corporate
+borrowing costs and the discount rate for everything else. In
+March 2020 only large-scale Fed purchases stopped a bond-market
+rout from becoming a broader financial crisis. The public pays
+for that insurance, in the form of central-bank intervention,
+while the profits in calm times are private.
+
+**For regulators.** The reform agenda follows directly from the
+mechanism: mandatory central clearing of Treasury transactions (SEC, Release No. 34-99149, December 2023): cash transactions by 31 December 2026 and repo by 30 June 2027 (extended one year, February 2025). But with a scope limit that matters: the repo leg that funds the trade is in scope, while a hedge fund's cash purchase from a dealer is not, so clearing reaches the funding and margin channel, not the cash leg. Central clearing replaces bilateral exposures with a clearinghouse and standardised margin; the FSB's final report (July 2025, Recommendations 4–5) backs the same menu (minimum haircuts in government-bond repos, enhanced margin, central clearing), so leverage cannot silently build to 100x in calm times; better data — the Fed's decomposition itself
+exists because Form PF does not report trade-level positions, so
+the $830bn is an estimate, not a measurement; and the contested idea of a basis purchase facility, proposed not by the Fed but by Kashyap, Stein, Wallen & Younger (Brookings Papers on Economic Activity, Spring 2025): hedged purchases in which the Fed buys cash Treasuries and shorts the equivalent futures, duration-neutral, either as a standing cap on the basis or as auctions of bundled basis packages, with penalty pricing to limit moral hazard, which would socialise the unwind risk the trade creates. Each remedy trades off the
+liquidity the trade provides against the fragility it creates,
+and the report's view is that clearing and margin floors address
+the mechanism, while a purchase facility addresses the symptom.
+
+## 5. Team takeaways
+
+Three things we will remember. First, a hedge is not a hedge
+against everything: this trade is hedged against the risk it
+looks exposed to (yields) and exposed to the risks it does not
+look exposed to (funding, haircuts, margin timing). Second,
+leverage is not a footnote to a small edge — at 50–100x, the
+funding terms *are* the trade, and a 2-percentage-point haircut
+change is a 100% capital call. Third, individually rational
+trades can be collectively catastrophic: each fund's decision to
+sell when its margin is called is sensible, and all of them
+selling at once is a crisis. The fixed-income lesson is that
+price risk and liquidity risk are different risks, and the
+Treasury market — the world's "risk-free" market — is where
+that difference matters most.
+
+---
+
+## Appendix A — Full quantitative analysis
+
+*Method, formulas and assumptions.* The real-CTD model
+(`analysis/basis_trade_real_ctd.py`) prices the CTD on its real
+coupon calendar (Feb 15 / Aug 15), settlement 11 Nov 2026, first
+coupon 15 Feb 2027 (96 of 184 days into the half-year):
+dirty price = Σ CF/(1+y/2)^(w+k); clean = dirty − accrued;
+DV01 and duration by ±1 bp repricing. Basis G = P(cash) −
+CF × F(futures). Hedge: short futures DV01-matched to the cash
+leg: n = DV01_cash / DV01_futures = 887 contracts (equivalently,
+1,000 × CF), each $100,000 face. One contract's DV01 is the CTD's DV01 divided by CF (≈$62.04/bp); the 887 contracts' DV01 totals $55,034/bp, exactly the cash leg's DV01. The 887 contracts deliver $88.7m
+face at expiry; the remaining $11.3m face is sold for cash at
+delivery, after the basis has converged, so it carries no
+residual basis risk. Repo borrowing = dirty market value ×
+(1 − h); equity = dirty market value × h; leverage = 1/h.
+Base-case P&L is computed leg by leg by exact repricing at delivery (same yield, G = 0): cash P&L +$250,268, futures P&L +$15,755, repo cost −$198,173, total +$67,850 — and the script asserts this equals carry + basis P&L (gap −$1,731, the unhedged-residual rounding). The par illustration
+(`analysis/basis_trade.py`, corrected 2026-11-11) uses the same
+formulas on a 10-year par bond; its base case is −$80,000 after
+the basis-sign correction.
+
+*Inputs and data vintage.* CTD: 3 7/8% 8/15/2033, CUSIP 91282CHT1, coupon 3.875%, CF 0.8870 — CME Treasury Analytics, 11 Nov 2026 12:10 PM CT (identification only; the Nov 11 snapshot's futures price is superseded). Cash price 94.188 clean / 95.12 dirty — observed Nov 10 close (Safe Rate Markets, republishing Treasury's end-of-day prices; bid 94.094 / offer 94.125), repricing to a yield of 4.894% (CME reported 4.9023%); cross-checks: DV01 $55.03 vs CME $53.98, modified duration 5.84 vs CME 5.78. Futures 106.25, official Nov 10 settlement 106'080 (CME). Both legs Nov 10 vintage. SOFR 3.88% effective 9 Nov 2026 (NY Fed, latest FRED observation at the pull); haircut 2% — scenario assumption; T = 0.055y to first delivery (1 Dec 2026). CME basis net of carry −0.3539 pts — reported, REJECTED: it implies cash ~93.71, ~38–48c below every Nov 10 print; kept in the output for comparison only. Nov 10 futures settlement 106'080 (CME). Aggregate anchors:
+Monin (Fed, June 22, 2026), September 2025 data (basis
+~$830bn; gross $4.0tn; repo $3.0tn; swap-spread ~$305bn;
+~$60bn swap-spread unwind in April 2025). CFTC COT: leveraged
+funds net short 2,262,310 10y contracts as of 3 Nov 2026.
+
+*Full results.* See `outputs/basis_trade_real_ctd_results.json` /
+`.csv` (generated by the script) and
+`outputs/basis_trade_results.json` (par illustration, corrected).
+Headline table is in Section 3 above.
+
+*Sensitivity (run on the real CTD).* Haircut 0% / 1% / 2% / 4%
+(leverage ∞ / 100x / 50x / 25x); repo +25 bp $12,769 / +50 bp $25,538 / +100 bp $51,075 (20-day horizon — the repo shock is
+small only because delivery is 20 days away; on a 3-month
+horizon it would be ~$116k); basis cash-cheapening 0.10 pts
+$100,000 / 0.50 pts $500,000 / 1.00 pts $1,000,000; yield ±25 bp VM $1,375,844 / ±50 bp $2,751,689 / ±100 bp $5,503,377
+(VM call scales linearly with |Δy|; as % of equity: 72% / 145%
+/ 289%).
+
+## Appendix B — AI declaration
+
+AI tools were
+used for research assistance, drafting, and code generation for
+the quantitative analysis in Appendix A. Every number, claim
+and formula in this report was checked by the team against the
+primary sources listed in the References: the model was run
+from scratch and its outputs reproduced; aggregate figures were
+verified in Monin (2026); and no AI-generated figure was used
+without an independent source. The team understands and can
+defend every number and claim in this report.
+
+## Appendix C — AI critique (~0.5 page) [RUN 2026-11-16]
+
+Prompt used (verbatim):
+> "Explain the Treasury cash-futures basis trade and why it is
+> considered low-risk: a hedge fund buys cash Treasuries, sells
+> Treasury futures, finances the bonds in repo, and earns the
+> basis as it converges to zero at delivery. What are the risks?"
+
+The prompt was run on 16 Nov 2026 on a fresh AI assistant given
+only the prompt (no report, no data — full response saved in
+`data/ai-response-2026-11-16.md`).
+
+Summary of the AI response: The response explains the trade as a
+duration-hedged relative-value position that earns the basis as
+it converges to zero at delivery, funded in repo, and correctly
+identifies the risks as funding and liquidity rather than
+interest rates — repo spikes, daily variation margin that can
+exceed equity, haircut increases, basis widening, CTD switches,
+rollover, and crowded-trade correlation. It never calls the trade
+risk-free and invents no figures.
+
+Critique (checked against the actual response — the draft's
+predicted errors did not all survive the check): Two of the
+draft's expected errors are not in this response and are dropped,
+not asserted: the response does not list interest-rate risk as
+the main risk (it says the risks are "mostly about funding and
+liquidity rather than interest rates"), and it does cover the
+cheapest-to-deliver switch. It also makes no aggregate claim, so
+there is no $830bn error to correct. What it does get wrong:
+(1) Leverage as typical. The response says haircuts are "often
+around 2%" and "50x is common". Verified sources say haircuts
+are typically around 3% or less, and measured leverage of large
+basis traders in 2019 averaged 21x (median 17.6x) (Barth &
+Kahn, OFR Working Paper 21-01). 50x is the leverage at the
+assumed 2% haircut in our model, not a typical figure — the
+response presents a model assumption as a market fact.
+(2) The sign condition on convergence. The response says the
+fund "earns the basis as it converges to zero" and "locks in the
+basis it bought at entry", without saying convergence only earns
+when cash is cheap at entry. With Basis G = P − CF×F, the clean
+P&L of the hedged position is exactly dG: entered with cash
+cheap (G < 0) it earns, entered with cash rich (G > 0) it loses.
+Our model: the Nov 10 entry had G = −0.0554 (cash cheap) and
+convergence earned +$55,425; the par illustration's original
++$120,000 base case had this sign flipped and corrected to
+−$80,000. The response's phrasing would lead a reader to think
+convergence always pays. What the response gets right matters
+too: it states the margin call can exceed equity (in our model
+144.7% of equity on a 50 bp yield fall), names the haircut
+channel, the March 2020 widening, and the crowded-trade
+correlation — the mechanism this report is built on.
+Correction: the trade is duration-hedged and funding-exposed;
+its risk is liquidity, leverage and correlation-to-one failure
+in stress — the March 2020 precedent.
+
+## References
+
+- Monin, P. (2026). "Decomposing Hedge Funds' U.S. Treasury Exposures." Federal Reserve FEDS Notes, June 22, 2026. https://www.federalreserve.gov/econres/notes/feds-notes/decomposing-hedge-funds-u-s-treasury-exposures-20260622.html
+- Patel, K. B. (2026). "How the U.S. Treasury Futures Market and the Basis Trade Could Be Affected by the Treasury Clearing Mandate: Part 1—A Primer." Chicago Fed Letter No. 516, Federal Reserve Bank of Chicago, January 2026. DOI: 10.21033/cfl-2026-516.
+- Barth, D., Kahn, R. J. & Mann, R. (2023). "Recent Developments in Hedge Funds' Treasury Futures and Repo Positions: is the Basis Trade 'Back'?" Federal Reserve FEDS Notes No. 2023-08-30-2, August 30, 2023. DOI: 10.17016/2380-7172.3355.
+- Barth, D. & Kahn, R. J. (2025). "Hedge funds and the Treasury cash-futures basis trade." Journal of Monetary Economics, vol. 155(C), article 103823. DOI: 10.1016/j.jmoneco.2025.103823. Working-paper version: Office of Financial Research Working Paper No. 21-01, "Hedge Funds and the Treasury Cash-Futures Disconnect," April 2021, revised July 2021.
+- Banegas, A., Monin, P. J. & Petrasek, L. (2021). "Sizing hedge funds' Treasury market activities and holdings." FEDS Notes, Board of Governors of the Federal Reserve System, October 6, 2021. DOI: 10.17016/2380-7172.2979.
+- Kruttli, M. S., Monin, P. J., Petrasek, L. & Watugala, S. W. (2025). "LTCM Redux? Hedge fund Treasury trading, funding fragility, and risk constraints." Journal of Financial Economics, vol. 169, article 104017. DOI: 10.1016/j.jfineco.2025.104017. Working paper: Finance and Economics Discussion Series 2021-038, Board of Governors of the Federal Reserve System.
+- Bank for International Settlements (2023). "Resilient risk-taking in financial markets." BIS Quarterly Review, September 2023, Box A. https://www.bis.org/publications/qr-202309/resilient-risk-taking-financial-markets
+- Schrimpf, A., Shin, H. S. & Sushko, V. (2020). "Leverage and margin spirals in fixed income markets during the Covid-19 crisis." BIS Bulletin No. 2, April 2020.
+- Financial Stability Board (2025). Leverage in Nonbank Financial Intermediation: Final report, July 9, 2025. https://www.fsb.org/2025/07/leverage-in-nonbank-financial-intermediation-final-report/ (Consultation report: December 18, 2024.)
+- U.S. Securities and Exchange Commission (2023). Standards for Covered Clearing Agencies for U.S. Treasury Securities and Application of the Broker-Dealer Customer Protection Rule with Respect to U.S. Treasury Securities. Exchange Act Release No. 34-99149, 89 FR 2714. Extension: Release No. 34-102487, 90 FR 11134 (March 4, 2025).
+- Kashyap, A. K., Stein, J. C., Wallen, J. L. & Younger, J. (2025). "Treasury Market Dysfunction and the Role of the Central Bank." Brookings Papers on Economic Activity, Spring 2025.
+- Federal Reserve Bank of Dallas (2025). "How sensitive is the Treasury cash-futures basis trade to funding condition shifts?" July 15, 2025.
+- CME Group: 10-Year Treasury Note Futures specifications; Treasury Analytics, November 11, 2026. https://www.cmegroup.com/tools-information/quikstrike/treasury-analytics.html
+- Safe Rate Markets: Treasury security prices (republishing U.S. Department of the Treasury end-of-day prices), security 91282CHT1, November 10, 2026 close 94.188 (bid 94.094 / offer 94.125). https://saferate.com/treasury/securities/91282CHT1
+- CFTC Commitments of Traders — leveraged funds, Treasury futures, positions as of November 3, 2026.
+- U.S. Department of the Treasury, Daily Treasury Par Yield Curve Rates, November 10, 2026; Federal Reserve Bank of New York, reference rates, effective November 9, 2026.
+
+Note on the March 2020 basis figure: the "14 bp → 142 bp" widening reported in secondary sources was NOT found in any primary source checked (Barth & Kahn OFR WP 21-01, Barth/Kahn/Mann 2023, Chicago Fed Letter 516, Schrimpf/Shin/Sushko 2020) and is not used in this report. Citable March 2020 spread figures, each with its own definition: implied-repo-minus-GC-repo basis grew to hundreds of basis points (Schrimpf, Shin & Sushko 2020, via Duffie 2020); the implied-vs-actual term repo spread on the June 5-year contract widened by 50 bp (Federal Reserve Bank of Dallas 2025). Neither is the report's price-points basis G, so neither is used in the stress table.

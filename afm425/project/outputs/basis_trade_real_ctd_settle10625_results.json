@@ -1,0 +1,95 @@
+{
+  "ctd": {
+    "security": "3 7/8% Treasury Note due 8/15/2033",
+    "cusip": "91282CHT1",
+    "coupon_pct": 3.875,
+    "yield_pct_cme": 4.9023,
+    "conversion_factor": 0.887,
+    "futures_price_106_01_5": 106.25,
+    "implied_repo_pct_cme": 3.39,
+    "sofr_pct_nov9": 3.88,
+    "asof": "2026-11-11 12:10 CT (CME Treasury Analytics)",
+    "delivery": "2026-12-01 (first delivery day)",
+    "T_years_to_delivery": 0.0548
+  },
+  "derived_price": {
+    "clean_per_100": 94.1427,
+    "dirty_per_100": 95.0693,
+    "accrued_per_100": 0.9266,
+    "gross_basis_pts": -0.1011,
+    "cme_basis_net_of_carry_pts": -0.3539,
+    "dv01_per_100k_contract_usd": 55.0,
+    "cme_cash_dv01_usd": 53.98,
+    "modified_duration_yrs": 5.8425,
+    "cme_modified_duration_yrs": 5.7838,
+    "macaulay_duration_yrs": 5.9857,
+    "cme_macaulay_duration_yrs": 5.9266
+  },
+  "representative_trade_100m": {
+    "face_usd": 100000000.0,
+    "market_value_dirty_usd": 95069290.0,
+    "equity_usd_2pct_haircut": 1901386.0,
+    "repo_borrowing_usd": 93167904.0,
+    "leverage": 50.0,
+    "dv01_cash_leg_usd_per_bp": 55003.0,
+    "dv01_per_future_usd_per_bp": 62.01,
+    "n_futures_contracts_100k": 887,
+    "dv01_futures_total_usd_per_bp": 55003.0
+  },
+  "base_case_pnl_to_delivery_usd": {
+    "coupon_accrual": 212329.0,
+    "repo_cost": -198078.0,
+    "carry_net": 14251.0,
+    "basis_pnl_scenario_A_our_repricing": 101090.0,
+    "total_scenario_A": 113610.0,
+    "total_scenario_A_pct_equity": 5.98,
+    "basis_pnl_scenario_B_cme_net_basis": 353900.0,
+    "total_scenario_B": 368151.0,
+    "total_scenario_B_pct_equity": 19.36,
+    "exact_leg_check_cash_pnl": 250568.0,
+    "exact_leg_check_futures_pnl": 61120.0,
+    "identity_gap_vs_carry_plus_basis": -1731.0
+  },
+  "stress_usd_and_pct_of_equity": {
+    "repo_plus_50bp_cost": 25525.0,
+    "repo_plus_50bp_pct_equity": 1.34,
+    "haircut_2_to_4pct_extra_equity": 1901386.0,
+    "haircut_2_to_4pct_pct_equity": 100.0,
+    "basis_widens_cash_cheapens_0.50pts_loss": 500000.0,
+    "basis_widens_0.50pts_pct_equity": 26.3,
+    "yield_falls_50bp_variation_margin_call": 2750138.0,
+    "yield_falls_50bp_vm_pct_equity": 144.6,
+    "yield_falls_50bp_cash_gain_exact": 2797425.0,
+    "yield_rises_50bp_cash_loss_exact": -2704004.0,
+    "yield_rises_50bp_futures_gain_dv01": 2750138.0
+  },
+  "aggregate_scaling_fed_sep2025_real_duration": {
+    "basis_trade_usd": 830000000000.0,
+    "gross_long_leg_dv01_usd_per_bp": 484926646.0,
+    "basis_widens_0.10pts_collective_loss_usd": 830000000.0
+  },
+  "sensitivities": {
+    "haircut_pct_leverage": {
+      "0": "inf",
+      "1": 100.0,
+      "2": 50.0,
+      "4": 25.0
+    },
+    "repo_shock_bp_cost_usd": {
+      "25": 12763.0,
+      "50": 25525.0,
+      "100": 51051.0
+    },
+    "basis_cash_cheapening_pts_loss_usd": {
+      "0.10": 100000.0,
+      "0.50": 500000.0,
+      "1.00": 1000000.0
+    },
+    "yield_move_bp_vm_call_usd": {
+      "25": 1375069.0,
+      "50": 2750138.0,
+      "100": 5500275.0
+    }
+  }
+}
+checks passed
